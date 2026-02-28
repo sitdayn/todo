@@ -1,6 +1,6 @@
 const SearchPanel = () => {
   return(
-    <input placeholder="Что-нибудь найти"/>
+    <input className="form-control my-search" placeholder="Что-нибудь найти"/>
   )  
 }
 
