@@ -10,3 +10,16 @@
     margin-top:1rem;
     margin-bottom:1rem;
 }
+
+.done {
+    text-decoration: line-through;
+}
+
+.item-list-base {
+    font-size: 1.5rem;
+}
+
+.important {
+    color: blue;
+    font-weight: bold;
+}
