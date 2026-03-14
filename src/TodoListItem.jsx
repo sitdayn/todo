@@ -7,19 +7,29 @@ class TodoListItem extends React.Component {
         important: false
     }
 
-    onLabelClick() {
-        console.log(`нажато: ${this.props.label}`)
-        this.setState({done: true});
-    }
-    
-    onMarkImportant() {
-        this.setState({
-            important: true
-        })
-    } 
+    onLabelClick = () => {
+        this.setState(
+            ({done}) =>
+            {
+                return {
+                    done: !done
+                }
+            }
+        );
+    };
+
+    onMarkImportant = () => { 
+        this.setState(
+            ({important}) => {
+                return {
+                    important: !important
+                }
+            }
+        );
+    };
 
     render() {
-        const {label} = this.props
+        const {label, onDeleted} = this.props
 
         const {done, important} = this.state
         let className = 'item-list-base';
@@ -41,7 +51,7 @@ class TodoListItem extends React.Component {
             <button type="button" className="btn btn-outline-success my-button mx-1">
                 <i className="fa-solid fa-check"></i>
             </button>
-            <button type="button" className="btn btn-outline-danger my-button mx-1">
+            <button type="button" className="btn btn-outline-danger my-button mx-1" onClick={onDeleted}>
                 <i className="fa-solid fa-trash"></i>
             </button>
             <button type="button" onClick={this.onMarkImportant.bind(this)} className="btn btn-outline-primary my-button mx-1">
