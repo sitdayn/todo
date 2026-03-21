@@ -1,13 +1,29 @@
+import { useState } from 'react';
+
 const AddItem = ({onAddItem}) => {
+    const [value, setValue] = useState('');
+
+    const handleAdd = () => {
+        onAddItem(value);
+        setValue('');
+    };
+
     return (
         <div className='item-add-form'>
             <div className="row justify-content-start">
-                <div className="col-6">
-                    <input className="form-control" placeholder="новое время поиграть"/>
+                <div className="col-4">
+                    <input
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="form-control" placeholder="новое время поиграть"/>
                 </div>
 
-                <div className="col-4">
-                    <button className='btn btn-outline-info' onClick={() => onAddItem('Шаблон')}>добавить</button>
+                <div className="col-2">
+                    <button
+                     className='btn btn-outline-info'
+                      onClick={handleAdd}>
+                        добавить
+                        </button>
                 </div> 
             </div>    
         </div>    

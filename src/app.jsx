@@ -5,14 +5,81 @@ import TodoList from './Todolist.jsx';
 import ItemsFilter from './ItemsFilter.jsx';
 import AddItem from './addItem.jsx';
 
+let maxId = 100;
 class App extends React.Component {
-  maxId = 100;
-  state = {
-    todoData : [
+
+  constructor(props) {
+      super(props);
+      
+      const savedTodos = localStorage.getItem('todoData');
+
+      this.state = {
+        todoData: savedTodos ? JSON.parse(savedTodos) : 
+        [
         { id: 1, label: 'проснуться'},
         { id: 2, label: 'умыться', important: true },
         { id: 3, label: 'покушать' }
-    ]
+      ],
+      term: '',//срок    
+      filter: 'all'
+      };
+  }
+
+  //функционал сохранения
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.todoData !== this.state.todoData) {
+      localStorage.setItem('todoData', JSON.stringify(this.state.todoData));
+    }
+  }
+
+  //поиск
+  onSearchChange = (term) => {
+    this.setState({term});
+  }
+
+  //фильтр
+  onFilterChange = (filter) => {
+    this.setState({filter});
+  }
+
+  searchItem(items, term) {
+    if(term.length === 0) {
+      return items;
+    }
+
+    return items.filter((item) => {
+      return item.label.toLowerCase() .includes(term.toLowerCase());
+    }) 
+  }
+
+  filterItem(items, filter) {
+      switch(filter) {
+        case 'active':
+          return items.filter((item) => !item.done);
+        case 'done':
+          return items.filter((item) => item.done);
+        default:
+          return items;    
+      }
+  }
+
+  toggleDone = (id) => {
+    this.setState(({todoData}) => {
+        const index = todoData.findIndex((item) => item.id === id);
+        const oldItem = todoData[index];
+        const newItem = {
+          ...oldItem,
+          done: !oldItem.done
+        };
+
+        return {
+          todoData: [
+            ...todoData.slice(0, index),
+            newItem,
+            ...todoData.slice(index + 1)
+          ]
+        };
+    });
   };
   
   deleteItem = (id) => {
@@ -33,7 +100,7 @@ class App extends React.Component {
     const newItem = {
       label: text,
       important: false,
-      id: this.maxId++
+      id: maxId++
     };
 
     this.setState(
@@ -50,18 +117,23 @@ class App extends React.Component {
   }
 
   render() {
+    const { todoData, term, filter } = this.state;
+    const visibleItems = this.filterItem(this.searchItem(todoData, term), filter);
+    const doneCount = todoData.filter((item) => item.done).length;
+    const todoCount = todoData.length - doneCount;
+
       return(
         <div className="container">
-            <AppHeader active = {3} done = {4}/>
+            <AppHeader active = {todoCount} done = {doneCount}/>
               <div className="row">
                   <div className="col-6">
-                    <SearchPanel/>
+                    <SearchPanel onSearchChange = {this.onSearchChange}/>
                   </div> 
                   <div className="col-6">   
-                    <ItemsFilter/>
+                    <ItemsFilter filter={filter} onFilterChange = {this.onFilterChange}/>
                   </div>
               </div>
-              <TodoList todos = {this.state.todoData} onDeleted = {this.deleteItem} />
+              <TodoList todos = {visibleItems} onDeleted = {this.deleteItem}  ontoggleDone = {this.toggleDone}/>
               <AddItem onAddItem = {this.addItem}/>
         </div>
       )
