@@ -11,14 +11,14 @@ const AddItem = ({onAddItem}) => {
     return (
         <div className='item-add-form'>
             <div className="row justify-content-start">
-                <div className="col-4">
+                <div className="col-8">
                     <input
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     className="form-control" placeholder="новое время поиграть"/>
                 </div>
 
-                <div className="col-2">
+                <div className="col-4">
                     <button
                      className='btn btn-outline-info'
                       onClick={handleAdd}>

@@ -1,3 +1,25 @@
+.search-filter {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#search {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#filter {
+    margin-top: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.label-text {
+    width: 90%;
+    word-break: break-word;
+}
+
 .container {
     margin-top: 1rem;
 }

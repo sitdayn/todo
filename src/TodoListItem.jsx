@@ -1,64 +1,41 @@
-import React from "react";
+const TodoListItem = ({ label, onDeleted, onToggleDone, onToggleImportant, done, important }) => {
+    let classNames = 'item-list-base label-text';
 
-class TodoListItem extends React.Component {
-
-    state = {
-        done: false,
-        important: false
+    if(done) {
+        classNames += ' done';
     }
 
-    onLabelClick = () => {
-        this.setState(
-            ({done}) =>
-            {
-                return {
-                    done: !done
-                }
-            }
-        );
-    };
+    if(important) {
+        classNames += ' important';
+    }
 
-    onMarkImportant = () => { 
-        this.setState(
-            ({important}) => {
-                return {
-                    important: !important
-                }
-            }
-        );
-    };
+    return(
+        <div className="row">
+            <div className="col-5">
+                <span onClick={onToggleDone} className={classNames}>
+                    {label}
+                </span>
+            </div>
 
-    render() {
-        const {label, onDeleted} = this.props
-
-        const {done, important} = this.state
-        let className = 'item-list-base';
-
-        if(done) { //Если равен истине
-            className += ' done';
-        }
-
-        if(important) {
-            className += ' important';
-        }
-
-        return <div>
-            <span
-            onClick={this.onLabelClick.bind(this)}
-            className={className}>
-                {label}
-            </span>
-            <button type="button" className="btn btn-outline-success my-button mx-1">
-                <i className="fa-solid fa-check"></i>
-            </button>
-            <button type="button" className="btn btn-outline-danger my-button mx-1" onClick={onDeleted}>
-                <i className="fa-solid fa-trash"></i>
-            </button>
-            <button type="button" onClick={this.onMarkImportant.bind(this)} className="btn btn-outline-primary my-button mx-1">
-                <i className="fa-solid fa-trophy"></i> 
-            </button> 
+            <div className="col-7 buttons">
+                {done ? (
+                    <button type="button" onClick={onToggleDone} className="btn btn-outline-warning my-button mx-1">
+                        <i className="fa-solid fa-arrow-left"></i>
+                    </button>
+                ) : (
+                    <button type="button" onClick={onToggleDone} className="btn btn-outline-success my-button mx-1">
+                    <i className="fa-solid fa-check"></i>
+                </button>    
+                )}
+                <button type="button" className="btn btn-outline-danger my-button mx-1" onClick={onDeleted}>
+                    <i className="fa-solid fa-trash"></i>
+                </button>
+                <button type="button" onClick={onToggleImportant} className="btn btn-outline-primary my-button mx-1">
+                    <i className="fa-solid fa-trophy"></i> 
+                </button> 
+            </div>
         </div>            
-    }
+    )
 }
 
 export default TodoListItem;
